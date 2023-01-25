@@ -1,0 +1,29 @@
+version: "3"
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    volumes:
+      - mysql-volume:/var/lib/mysql
+      #- /var/lib/mysql
+      #-   ./:/app
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: iapps
+      MYSQL_ROOT_PASSWORD: root
+  epaper-app:
+    image: epaper
+    restart: on-failure
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+
+volumes:
+  mysql-volume:
+    external: true
